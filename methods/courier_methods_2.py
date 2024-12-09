@@ -1,21 +1,12 @@
 import requests
-import random
-import string
-from data import *
-
-
-# метод регистрации нового курьера возвращает список из логина и пароля
-# если регистрация не удалась, возвращает пустой список
-
-
-def generate_random_string(length):
-    letters = string.ascii_lowercase
-    random_string = ''.join(random.choice(letters) for i in range(length))
-    return random_string
+import allure
+from helpers import generate_random_string
+from data import Urls, Endpoint
 
 
 class CourierMethods:
     @staticmethod
+    @allure.step("Создание курьера и получение данных")
     def register_new_courier_and_return_login_password():
         # метод генерирует строку, состоящую только из букв нижнего регистра, в качестве параметра передаём длину строки
 
@@ -47,6 +38,7 @@ class CourierMethods:
         return login_pass
 
     @staticmethod
+    @allure.step("Создание курьера")
     def register_new_courier(login, password, first_name):
         # собираем тело запроса
         payload = {
@@ -61,6 +53,7 @@ class CourierMethods:
         return response.status_code, response.json()
 
     @staticmethod
+    @allure.step("Логин курьера")
     def login_courier(login, password):
         payload = {
             "login": login,
@@ -70,6 +63,7 @@ class CourierMethods:
         return response.status_code, response.json()
 
     @staticmethod
+    @allure.step("Удаление курьера")
     def delete_courier(courier_id):
         response = requests.delete(f'{Urls.URL}{Endpoint.DELETE_COURIER}' + str(courier_id))
         return response.status_code, response.json()
